@@ -56,7 +56,19 @@ int Boiler::add(const char* name, const std::filesystem::path path) const
         }
     }
 
-    std::filesystem::copy(path, dest, std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+    std::vector<std::filesystem::path> paths;
+
+    for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(dest))
+    {
+        paths.push_back(entry.path());
+    }
+
+    for (const std::filesystem::path& path : paths)
+    {
+        std::filesystem::remove_all(path);
+    }
+
+    std::filesystem::copy(path, dest, std::filesystem::copy_options::recursive);
 
     std::cout << "Saved new boilerplate \"" << name << "\".\n";
 
