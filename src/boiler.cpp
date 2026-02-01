@@ -35,11 +35,18 @@ int Boiler::list() const
     return 0;
 }
 
-int Boiler::add(const char* name, const std::filesystem::path path) const
+int Boiler::add(const std::string& name, const std::filesystem::path path) const
 {
     if (!std::filesystem::exists(path))
     {
         std::cout << "The specified path does not exist.\n";
+
+        return 1;
+    }
+
+    if (name.empty())
+    {
+        std::cout << "The specified name is empty.\n";
 
         return 1;
     }
@@ -77,8 +84,15 @@ int Boiler::add(const char* name, const std::filesystem::path path) const
     return 0;
 }
 
-int Boiler::load(const char* name, const std::filesystem::path path) const
+int Boiler::load(const std::string& name, const std::filesystem::path path) const
 {
+    if (name.empty())
+    {
+        std::cout << "The specified name is empty.\n";
+
+        return 1;
+    }
+
     const std::filesystem::path source = root / name;
 
     if (!std::filesystem::exists(source))
@@ -126,8 +140,15 @@ int Boiler::load(const char* name, const std::filesystem::path path) const
     return 0;
 }
 
-int Boiler::remove(const char* name) const
+int Boiler::remove(const std::string& name) const
 {
+    if (name.empty())
+    {
+        std::cout << "The specified name is empty.\n";
+
+        return 1;
+    }
+
     const std::filesystem::path path = root / name;
 
     if (!std::filesystem::exists(path))

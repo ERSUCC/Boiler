@@ -1,9 +1,31 @@
 #include <exception>
 #include <iostream>
+#include <string>
 #include <string.h>
 
 #include "boiler.h"
 #include "info.h"
+
+std::string cleanName(char* name)
+{
+    size_t start = 0;
+
+    while (isspace(name[start]))
+    {
+        start++;
+    }
+
+    size_t end = strlen(name) - 1;
+
+    while (end > 0 && isspace(name[end]))
+    {
+        end--;
+    }
+
+    name[end + 1] = '\0';
+
+    return name + start;
+}
 
 int main(int argc, char** argv)
 {
@@ -87,7 +109,7 @@ int main(int argc, char** argv)
                 return 1;
             }
 
-            return (new Boiler())->add(argv[2], argv[3]);
+            return (new Boiler())->add(cleanName(argv[2]), argv[3]);
         }
 
         if (!strncmp(argv[1], "load", 5))
@@ -120,7 +142,7 @@ int main(int argc, char** argv)
                 path = argv[3];
             }
 
-            return (new Boiler())->load(argv[2], path);
+            return (new Boiler())->load(cleanName(argv[2]), path);
         }
 
         if (!strncmp(argv[1], "remove", 7))
@@ -146,7 +168,7 @@ int main(int argc, char** argv)
                 return 1;
             }
 
-            return (new Boiler())->remove(argv[2]);
+            return (new Boiler())->remove(cleanName(argv[2]));
         }
 
         if (!strncmp(argv[1], "-", 1))
