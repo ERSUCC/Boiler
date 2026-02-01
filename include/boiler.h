@@ -1,10 +1,10 @@
 #pragma once
 
 #include <algorithm>
-#include <exception>
 #include <filesystem>
 #include <iostream>
 #include <stdio.h>
+#include <system_error>
 #include <vector>
 
 struct Boiler

@@ -139,7 +139,7 @@ std::filesystem::path Boiler::platformRoot()
     {
         CoTaskMemFree(path);
 
-        throw std::exception("Fatal: Failed to locate AppData directory.");
+        throw std::system_error(std::error_code(errno, std::system_category()), "Fatal: Failed to locate AppData directory.");
     }
 
     std::filesystem::path result = std::filesystem::path(path) / "Boiler";
@@ -151,7 +151,7 @@ std::filesystem::path Boiler::platformRoot()
 
 #elif __APPLE__
 
-#include <pwd.h
+#include <pwd.h>
 #include <unistd.h>
 
 std::filesystem::path Boiler::platformRoot()
@@ -160,7 +160,7 @@ std::filesystem::path Boiler::platformRoot()
 
     if (!pw)
     {
-        throw std::exception("Fatal: Failed to locate user home directory.");
+        throw std::system_error(std::error_code(errno, std::system_category()), "Fatal: Failed to locate user home directory.");
     }
 
     return std::filesystem::path(pw->pw_dir) / "Library" / "Boiler";
@@ -168,7 +168,7 @@ std::filesystem::path Boiler::platformRoot()
 
 #else
 
-#include <pwd.h
+#include <pwd.h>
 #include <unistd.h>
 
 std::filesystem::path Boiler::platformRoot()
@@ -177,7 +177,7 @@ std::filesystem::path Boiler::platformRoot()
 
     if (!pw)
     {
-        throw std::exception("Fatal: Failed to locate user home directory.");
+        throw std::system_error(std::error_code(errno, std::system_category()), "Fatal: Failed to locate user home directory.");
     }
 
     return std::filesystem::path(pw->pw_dir) / ".boiler";

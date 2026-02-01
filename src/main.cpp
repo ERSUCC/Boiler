@@ -113,7 +113,7 @@ int main(int argc, char** argv)
                 return 1;
             }
 
-            char* path = ".";
+            const char* path = ".";
 
             if (argc >= 4)
             {
