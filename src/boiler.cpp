@@ -56,6 +56,7 @@ int Boiler::add(const std::string& name, const std::filesystem::path path) const
     if (std::filesystem::exists(dest))
     {
         std::cout << "A boilerplate already exists with the name \"" << name << "\". Would you like to overwrite it? [y/n] ";
+        std::cout.flush();
 
         if (getchar() != 'y')
         {
@@ -114,6 +115,7 @@ int Boiler::load(const std::string& name, const std::filesystem::path path) cons
     if (!std::filesystem::is_empty(path))
     {
         std::cout << "The target directory is not empty. Would you like to overwrite it? [y/n] ";
+        std::cout.flush();
 
         if (getchar() != 'y')
         {
@@ -159,6 +161,7 @@ int Boiler::remove(const std::string& name) const
     }
 
     std::cout << "Are you sure you want to remove boilerplate \"" << name << "\"? [y/n] ";
+    std::cout.flush();
 
     if (getchar() != 'y')
     {
