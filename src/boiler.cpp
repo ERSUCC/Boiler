@@ -56,6 +56,8 @@ int Boiler::add(const char* name, const std::filesystem::path path) const
         }
     }
 
+    std::filesystem::create_directories(dest);
+
     std::vector<std::filesystem::path> paths;
 
     for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(dest))
