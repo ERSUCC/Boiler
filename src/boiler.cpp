@@ -93,7 +93,18 @@ int Boiler::load(const char* name, const std::filesystem::path path) const
         }
     }
 
-    std::filesystem::remove_all(path);
+    std::vector<std::filesystem::path> paths;
+
+    for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(path))
+    {
+        paths.push_back(entry.path());
+    }
+
+    for (const std::filesystem::path& path : paths)
+    {
+        std::filesystem::remove_all(path);
+    }
+
     std::filesystem::copy(source, path, std::filesystem::copy_options::recursive);
 
     std::cout << "Loaded boilerplate \"" << name << "\".\n";
