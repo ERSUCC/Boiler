@@ -20,6 +20,7 @@ void printUsage()
     std::cout << "Usage: boiler [-v | --version] [-h | --help] <command> [<options>]\n\n";
     std::cout << "Available commands:\n\n";
     std::cout << "list: List all saved boilerplates\n";
+    std::cout << "inspect: Display contents of existing boilerplate\n";
     std::cout << "add: Add a new boilerplate\n";
     std::cout << "load: Load an existing boilerplate\n";
     std::cout << "remove: Remove an existing boilerplate\n\n";
