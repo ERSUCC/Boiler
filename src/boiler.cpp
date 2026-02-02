@@ -53,6 +53,13 @@ int Boiler::add(const std::string& name, const std::filesystem::path path) const
 
     const std::filesystem::path dest = root / name;
 
+    if (dest.string().size() >= maxPath())
+    {
+        std::cout << "The specified name exceeds the maximum allowable path length.\n";
+
+        return 1;
+    }
+
     if (std::filesystem::exists(dest))
     {
         std::cout << "A boilerplate already exists with the name \"" << name << "\". Would you like to overwrite it? [y/n] ";
@@ -198,8 +205,14 @@ std::filesystem::path Boiler::platformRoot()
     return result;
 }
 
+size_t Boiler::maxPath()
+{
+    return MAX_PATH;
+}
+
 #elif __APPLE__
 
+#include <limits.h>
 #include <pwd.h>
 #include <unistd.h>
 
@@ -215,8 +228,14 @@ std::filesystem::path Boiler::platformRoot()
     return std::filesystem::path(pw->pw_dir) / "Library" / "Boiler";
 }
 
+size_t Boiler::maxPath()
+{
+    return PATH_MAX;
+}
+
 #else
 
+#include <limits.h>
 #include <pwd.h>
 #include <unistd.h>
 
@@ -230,6 +249,11 @@ std::filesystem::path Boiler::platformRoot()
     }
 
     return std::filesystem::path(pw->pw_dir) / ".boiler";
+}
+
+size_t Boiler::maxPath()
+{
+    return PATH_MAX;
 }
 
 #endif

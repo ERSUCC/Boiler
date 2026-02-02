@@ -20,6 +20,8 @@ struct Boiler
 private:
     static std::filesystem::path platformRoot();
 
+    static size_t maxPath();
+
     const std::filesystem::path root;
 
 };
