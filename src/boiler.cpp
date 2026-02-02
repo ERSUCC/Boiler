@@ -35,6 +35,29 @@ int Boiler::list() const
     return 0;
 }
 
+int Boiler::inspect(const std::string& name) const
+{
+    if (name.empty())
+    {
+        std::cout << "The specified name is empty.\n";
+
+        return 1;
+    }
+
+    const std::filesystem::path path = root / name;
+
+    if (!std::filesystem::exists(path))
+    {
+        std::cout << "No boilerplate exists with the name \"" << name << "\".\n";
+
+        return 1;
+    }
+
+    listFilesRecursive(path, 0);
+
+    return 0;
+}
+
 int Boiler::add(const std::string& name, const std::filesystem::path path) const
 {
     if (!std::filesystem::exists(path))
@@ -187,7 +210,7 @@ int Boiler::remove(const std::string& name) const
 #include <objbase.h>
 #include <ShlObj.h>
 
-std::filesystem::path Boiler::platformRoot()
+std::filesystem::path Boiler::platformRoot() const
 {
     PWSTR path;
 
@@ -205,7 +228,7 @@ std::filesystem::path Boiler::platformRoot()
     return result;
 }
 
-size_t Boiler::maxPath()
+size_t Boiler::maxPath() const
 {
     return MAX_PATH;
 }
@@ -216,7 +239,7 @@ size_t Boiler::maxPath()
 #include <pwd.h>
 #include <unistd.h>
 
-std::filesystem::path Boiler::platformRoot()
+std::filesystem::path Boiler::platformRoot() const
 {
     struct passwd* pw = getpwuid(getuid());
 
@@ -228,7 +251,7 @@ std::filesystem::path Boiler::platformRoot()
     return std::filesystem::path(pw->pw_dir) / "Library" / "Boiler";
 }
 
-size_t Boiler::maxPath()
+size_t Boiler::maxPath() const
 {
     return PATH_MAX;
 }
@@ -239,7 +262,7 @@ size_t Boiler::maxPath()
 #include <pwd.h>
 #include <unistd.h>
 
-std::filesystem::path Boiler::platformRoot()
+std::filesystem::path Boiler::platformRoot() const
 {
     struct passwd* pw = getpwuid(getuid());
 
@@ -251,9 +274,44 @@ std::filesystem::path Boiler::platformRoot()
     return std::filesystem::path(pw->pw_dir) / ".boiler";
 }
 
-size_t Boiler::maxPath()
+size_t Boiler::maxPath() const
 {
     return PATH_MAX;
 }
 
 #endif
+
+void Boiler::listFilesRecursive(const std::filesystem::path& path, const size_t depth) const
+{
+    std::vector<std::filesystem::path> paths;
+
+    for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(path))
+    {
+        paths.push_back(entry.path());
+    }
+
+    std::sort(paths.begin(), paths.end(), [](const std::filesystem::path& a, const std::filesystem::path& b)
+    {
+        if (std::filesystem::is_directory(a) == std::filesystem::is_directory(b))
+        {
+            return a.filename().string() < b.filename().string();
+        }
+
+        return std::filesystem::is_directory(a);
+    });
+
+    for (const std::filesystem::path& path : paths)
+    {
+        for (size_t i = 0; i < depth; i++)
+        {
+            std::cout << "|  ";
+        }
+
+        std::cout << path.filename().string() << "\n";
+
+        if (std::filesystem::is_directory(path))
+        {
+            listFilesRecursive(path, depth + 1);
+        }
+    }
+}

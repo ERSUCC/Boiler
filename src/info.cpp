@@ -32,6 +32,12 @@ void printUsageList()
     std::cout << "Lists all saved boilerplates.\n";
 }
 
+void printUsageInspect()
+{
+    std::cout << "Usage: boiler inspect [-h | --help] <name>\n\n";
+    std::cout << "Displays the contents of the boilerplate with the specified name.\n";
+}
+
 void printUsageAdd()
 {
     std::cout << "Usage: boiler add [-h | --help] <name> <path>\n\n";

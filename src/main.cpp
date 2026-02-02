@@ -79,6 +79,32 @@ int main(int argc, char** argv)
             return (new Boiler())->list();
         }
 
+        if (!strncmp(argv[1], "inspect", 9))
+        {
+            if (argc < 3)
+            {
+                printUsageInspect();
+
+                return 1;
+            }
+
+            if (!strncmp(argv[2], "-h", 3) || !strncmp(argv[2], "--help", 7))
+            {
+                printUsageInspect();
+
+                return 0;
+            }
+
+            if (!strncmp(argv[2], "-", 1))
+            {
+                printUnknownCommand("option", "inspect", argv[2]);
+
+                return 1;
+            }
+
+            return (new Boiler())->inspect(cleanName(argv[2]));
+        }
+
         if (!strncmp(argv[1], "add", 4))
         {
             if (argc < 3)
